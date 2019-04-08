@@ -16,7 +16,7 @@ database_types = ["train", "validation", "test"]
 
 # Read .txt file, and convert to .tsv file
 for database_type in database_types:
-    FOLDER_PATH = INPUT_PATH + "/" + database_type + "/" + database_type
+    FOLDER_PATH = INPUT_PATH + "/" + database_type
 
     TEXT_FILE_PATH = FOLDER_PATH + "/dialogues_" + database_type + ".txt"
     EMOTION_FILE_PATH = FOLDER_PATH + "/dialogues_emotion_" + database_type + ".txt"
@@ -36,7 +36,7 @@ if not os.path.exists(OUTPUT_PATH):
 
 # Split each line of previously created .tsv into separate line for each turn of dialogue
 for database_type in database_types:
-    FILE_PATH = INPUT_PATH + "/" + database_type + "/" + database_type+"/"+database_type
+    FILE_PATH = INPUT_PATH + "/" + database_type +"/"+database_type
     dialogue_data = pd.read_csv(FILE_PATH + ".tsv", sep='\t', index_col=0)
 
     def split_dialogue(whole_dialogue):
