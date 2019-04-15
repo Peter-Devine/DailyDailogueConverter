@@ -2,6 +2,7 @@ import argparse
 import sys
 import os
 import pandas as pd
+from io import open
 
 # Takes input and output directories as arguments
 parser=argparse.ArgumentParser()
@@ -20,7 +21,7 @@ database_types = ["train", "validation", "test"]
 
 # Read .txt file, and convert to .tsv file
 for database_type in database_types:
-    FOLDER_PATH = INPUT_PATH + "/" + database_type + "/" + database_type
+    FOLDER_PATH = INPUT_PATH + "/" + database_type
 
     TEXT_FILE_PATH = FOLDER_PATH + "/dialogues_" + database_type + ".txt"
     EMOTION_FILE_PATH = FOLDER_PATH + "/dialogues_emotion_" + database_type + ".txt"
@@ -32,7 +33,7 @@ for database_type in database_types:
 
     pd.DataFrame({"dialogue": dialogue_output,
               "emotion": emotion_output,
-              "act": act_output}).to_csv(FOLDER_PATH + "/"+database_type+".tsv", sep='\t')
+              "act": act_output}).to_csv(FOLDER_PATH + "/"+database_type+".tsv", sep='\t', encoding="utf-8")
 
 # Create output directory if not already created
 if not os.path.exists(OUTPUT_PATH):
@@ -40,8 +41,8 @@ if not os.path.exists(OUTPUT_PATH):
 
 # Split each line of previously created .tsv into separate line for each turn of dialogue
 for database_type in database_types:
-    FILE_PATH = INPUT_PATH + "/" + database_type + "/" + database_type+"/"+database_type
-    dialogue_data = pd.read_csv(FILE_PATH + ".tsv", sep='\t', index_col=0)
+    FILE_PATH = INPUT_PATH + "/" + database_type+"/"+database_type
+    dialogue_data = pd.read_csv(FILE_PATH + ".tsv", sep='\t', index_col=0, encoding="utf-8")
 
     def split_dialogue(whole_dialogue):
         split_dialogue_list = whole_dialogue.split("__eou__")
@@ -130,6 +131,6 @@ for database_type in database_types:
               "context": context_series})
 
     if database_type == "validation":
-        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"/dev.tsv", sep='\t')
+        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"/dev.tsv", sep='\t', encoding="utf-8")
     else:
-        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"/"+database_type+".tsv", sep='\t')
+        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"/"+database_type+".tsv", sep='\t', encoding="utf-8")
