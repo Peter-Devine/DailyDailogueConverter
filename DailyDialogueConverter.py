@@ -6,7 +6,7 @@ import pandas as pd
 # Takes input and output directories as arguments
 parser=argparse.ArgumentParser()
 parser.add_argument('--input', default=".", help='The file path of the unzipped DailyDialog dataset')
-parser.add_argument('--output', default=".\\data", help='The file path of the output dataset')
+parser.add_argument('--output', default="./data", help='The file path of the output dataset')
 parser.add_argument('--separator', default=r"[TRN]", help='The separator token between context turns')
 parser.add_argument('--turns', default="1", help='The number of previous turns to include in the context')
 args = parser.parse_args()
@@ -20,11 +20,11 @@ database_types = ["train", "validation", "test"]
 
 # Read .txt file, and convert to .tsv file
 for database_type in database_types:
-    FOLDER_PATH = INPUT_PATH + "\\" + database_type + "\\" + database_type
+    FOLDER_PATH = INPUT_PATH + "/" + database_type + "/" + database_type
 
-    TEXT_FILE_PATH = FOLDER_PATH + "\\dialogues_" + database_type + ".txt"
-    EMOTION_FILE_PATH = FOLDER_PATH + "\\dialogues_emotion_" + database_type + ".txt"
-    ACT_FILE_PATH = FOLDER_PATH + "\\dialogues_act_" + database_type + ".txt"
+    TEXT_FILE_PATH = FOLDER_PATH + "/dialogues_" + database_type + ".txt"
+    EMOTION_FILE_PATH = FOLDER_PATH + "/dialogues_emotion_" + database_type + ".txt"
+    ACT_FILE_PATH = FOLDER_PATH + "/dialogues_act_" + database_type + ".txt"
 
     dialogue_output = open(TEXT_FILE_PATH,"r", encoding="utf8").read().splitlines()
     emotion_output = open(EMOTION_FILE_PATH,"r", encoding="utf8").read().splitlines()
@@ -32,7 +32,7 @@ for database_type in database_types:
 
     pd.DataFrame({"dialogue": dialogue_output,
               "emotion": emotion_output,
-              "act": act_output}).to_csv(FOLDER_PATH + "\\"+database_type+".tsv", sep='\t')
+              "act": act_output}).to_csv(FOLDER_PATH + "/"+database_type+".tsv", sep='\t')
 
 # Create output directory if not already created
 if not os.path.exists(OUTPUT_PATH):
@@ -40,7 +40,7 @@ if not os.path.exists(OUTPUT_PATH):
 
 # Split each line of previously created .tsv into separate line for each turn of dialogue
 for database_type in database_types:
-    FILE_PATH = INPUT_PATH + "\\" + database_type + "\\" + database_type+"\\"+database_type
+    FILE_PATH = INPUT_PATH + "/" + database_type + "/" + database_type+"/"+database_type
     dialogue_data = pd.read_csv(FILE_PATH + ".tsv", sep='\t', index_col=0)
 
     def split_dialogue(whole_dialogue):
@@ -130,6 +130,6 @@ for database_type in database_types:
               "context": context_series})
 
     if database_type == "validation":
-        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"\\dev.tsv", sep='\t')
+        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"/dev.tsv", sep='\t')
     else:
-        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"\\"+database_type+".tsv", sep='\t')
+        discretised_emotion_dialogue_df.to_csv(OUTPUT_PATH+"/"+database_type+".tsv", sep='\t')
