@@ -96,7 +96,7 @@ for database_type in database_types:
         for context_column in context_df.columns[::-1]:
             # Here, we make sure the separator is here if the dialogue turn is not empty
             empty_string_selector = context_df[context_column] == ""
-            separator_repeated = [SEPARATOR]*context_df.shape[0]
+            separator_repeated = [" " + SEPARATOR + " "]*context_df.shape[0]
             separator_repeated_as_df = pd.DataFrame(separator_repeated, columns=["Dialogue"]).mask(empty_string_selector, "")
             separator_repeated_selected = separator_repeated_as_df.mask(empty_string_selector, "")["Dialogue"]
             
